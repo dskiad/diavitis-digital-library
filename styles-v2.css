@@ -1,0 +1,99 @@
+/* Archive UX v2 — readable years + high-definition issue selection */
+.library-canvas>img{
+  image-rendering:auto;
+  filter:contrast(1.025) saturate(1.035) brightness(1.01);
+  backface-visibility:hidden;
+  transform:translateZ(0);
+}
+.year-hotspot{overflow:visible}
+.year-label{
+  position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
+  min-width:42px;padding:3px 6px 2px;border:1px solid rgba(255,220,139,.78);
+  border-radius:4px;background:linear-gradient(180deg,rgba(9,31,66,.96),rgba(3,12,29,.96));
+  box-shadow:0 3px 10px rgba(0,0,0,.62),inset 0 0 0 1px rgba(255,255,255,.07);
+  color:#ffe7a6;font:700 clamp(9px,.76vw,13px)/1.05 Georgia,"Times New Roman",serif;
+  letter-spacing:.035em;text-shadow:0 1px 2px #000;pointer-events:none;z-index:4;white-space:nowrap;
+  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+}
+.year-hotspot.has-archive .year-label:after{
+  content:"";display:inline-block;width:5px;height:5px;margin-left:4px;border-radius:50%;
+  background:#f2c45e;box-shadow:0 0 7px rgba(255,205,83,.95);vertical-align:middle;
+}
+.year-zoom{
+  position:absolute;left:50%;top:43%;transform:translate(-50%,-50%) scale(.72);opacity:0;
+  pointer-events:none;z-index:8;padding:6px 10px 5px;border:1px solid #e7bc60;border-radius:6px;
+  background:linear-gradient(180deg,rgba(16,47,95,.98),rgba(4,16,39,.98));color:#ffe7a5;
+  box-shadow:0 10px 26px rgba(0,0,0,.78),0 0 22px rgba(244,190,75,.35);
+  font:700 clamp(16px,1.55vw,26px)/1 Georgia,"Times New Roman",serif;letter-spacing:.045em;text-shadow:0 1px 3px #000;
+  transition:opacity .16s ease,transform .2s cubic-bezier(.2,.8,.2,1);
+}
+.year-hotspot:hover .year-label,.year-hotspot:focus-visible .year-label,.year-hotspot.is-peeking .year-label{
+  transform:translateX(-50%) scale(1.16);filter:brightness(1.12);
+  box-shadow:0 5px 16px rgba(0,0,0,.7),0 0 15px rgba(240,188,71,.32);
+}
+.year-hotspot:hover .year-zoom,.year-hotspot:focus-visible .year-zoom,.year-hotspot.is-peeking .year-zoom{
+  opacity:1;transform:translate(-50%,-50%) scale(1);
+}
+.year-hotspot.is-peeking{z-index:24}
+
+.issue-dialog{width:min(1080px,95vw);max-height:90dvh;background:linear-gradient(155deg,#2d170d,#0c0805 70%)}
+.issue-grid.archive-collection{display:block}
+.archive-heading{text-align:center;margin:0 40px 18px}
+.archive-heading h2{margin:1px 0 0;color:#f4d77f;font-weight:500;font-size:clamp(27px,3vw,42px)}
+.archive-volume-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;align-items:start}
+.archive-volume{
+  display:grid;grid-template-rows:auto 1fr;gap:11px;padding:13px;border:1px solid rgba(221,184,99,.33);
+  background:linear-gradient(180deg,rgba(255,244,213,.055),rgba(0,0,0,.16));
+  box-shadow:inset 0 0 24px rgba(202,151,69,.04)
+}
+.archive-cover-wrap{
+  position:relative;display:grid;place-items:center;min-height:300px;
+  background:radial-gradient(circle at 50% 40%,rgba(255,229,167,.08),rgba(0,0,0,.18) 68%)
+}
+.archive-cover{
+  display:block;width:min(248px,100%);max-height:52dvh;object-fit:contain;background:#efe7d4;
+  border:1px solid rgba(245,213,139,.55);box-shadow:0 17px 38px rgba(0,0,0,.68),0 0 18px rgba(230,185,87,.08);
+  transition:transform .22s ease,box-shadow .22s ease
+}
+.archive-volume:hover .archive-cover{
+  transform:translateY(-3px) scale(1.018);box-shadow:0 22px 45px rgba(0,0,0,.72),0 0 23px rgba(230,185,87,.16)
+}
+.archive-cover-wrap.is-fallback:before{
+  content:"Ο ΔΙΑΒΗΤΗΣ";display:grid;place-items:center;width:min(230px,90%);aspect-ratio:3/4.1;
+  border:1px solid rgba(245,213,139,.55);background:linear-gradient(145deg,#0c2855,#e8dcc1 56%,#12366d);
+  color:#f4d780;font-size:22px;text-align:center;box-shadow:0 17px 38px rgba(0,0,0,.65)
+}
+.archive-cover-wrap.is-fallback:after{
+  content:attr(data-year);position:absolute;color:#f8e5a6;font-size:34px;top:58%;left:50%;transform:translate(-50%,-50%)
+}
+.archive-volume-copy{text-align:center}
+.archive-issue-number{
+  display:inline-block;margin:-2px auto 5px;padding:3px 9px;border:1px solid rgba(222,183,92,.42);
+  border-radius:999px;color:#f4d77f;font-size:12px;letter-spacing:.09em
+}
+.archive-volume h3{margin:0;color:#f2dfb7;font-size:19px;font-weight:500}
+.archive-volume p{margin:5px 0 0;color:#cdbb9c;font-size:12px;line-height:1.4}
+.archive-actions{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin-top:11px}
+.archive-actions .issue-pdf{font-size:11px;padding:9px 11px}
+.cover-source-link,.archive-source{color:#d9c18d;text-decoration:none;border-bottom:1px solid rgba(217,193,141,.34);font-size:11px}
+.cover-source-link:hover,.archive-source:hover{color:#ffe2a0;border-color:#ffe2a0}
+.archive-quality-note{margin:16px auto 8px;max-width:760px;text-align:center;color:#a99169;font-size:11px;line-height:1.5}
+.archive-source{display:block;width:max-content;max-width:100%;margin:8px auto 0;text-align:center}
+.archive-empty{
+  width:min(620px,100%);margin:12px auto 18px;padding:24px;text-align:center;border:1px solid rgba(224,185,96,.25);
+  background:rgba(255,255,255,.025);color:#d8c7a7
+}
+.archive-empty strong{display:block;color:#f4d77f;font-size:46px;margin-bottom:8px}
+.archive-empty p{line-height:1.55;margin:0;color:#c7b697}
+
+@media(max-width:760px){
+  .year-label{min-width:38px;padding:3px 5px;font-size:10px}.year-zoom{font-size:18px;padding:5px 8px}
+  .archive-volume-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px}
+  .archive-cover-wrap{min-height:220px}.archive-cover{width:min(190px,100%);max-height:41dvh}
+  .archive-volume{padding:10px}.archive-volume h3{font-size:16px}
+}
+@media(max-width:470px){
+  .archive-volume-grid{grid-template-columns:1fr 1fr}.archive-cover-wrap{min-height:190px}
+  .archive-cover{width:min(160px,100%);max-height:36dvh}.archive-actions{gap:5px}
+  .archive-actions .issue-pdf{font-size:9px;padding:7px 8px}.cover-source-link{font-size:9px}.year-label{font-size:9px;min-width:35px}
+}
