@@ -5,6 +5,11 @@
   const DEMO_MODE = config.DEMO_MODE !== false;
   const API_BASE = (config.API_BASE_URL || '').replace(/\/$/, '');
   const WELCOME_SECONDS = Number(config.WELCOME_SECONDS || 7);
+  // Page 2 shows its unique background alone first, then fades in the
+  // email/OTP form; after the form closes, the background is shown alone
+  // again before the Library opens.
+  const ACCESS_REVEAL_DELAY = Number(config.ACCESS_REVEAL_DELAY_MS || 4000);
+  const ACCESS_EXIT_DELAY = Number(config.ACCESS_EXIT_DELAY_MS || 4000);
   const ARCHIVE_SOURCE_URL = 'https://drive.google.com/drive/folders/1znNVAI73aTP0xJJcPm0kSI-mUymVtYHC';
 
   const pages = {
@@ -19,6 +24,18 @@
   const otpInput = $('otpInput');
   const requestOtpButton = $('requestOtpButton');
   const verifyButton = $('verifyButton');
+  const accessOverlay = $('accessOverlay');
+  let accessRevealTimer = null;
+
+  function scheduleAccessOverlayReveal() {
+    accessOverlay.classList.remove('is-visible');
+    clearTimeout(accessRevealTimer);
+    accessRevealTimer = setTimeout(() => accessOverlay.classList.add('is-visible'), ACCESS_REVEAL_DELAY);
+  }
+  function closeAccessOverlay() {
+    clearTimeout(accessRevealTimer);
+    accessOverlay.classList.remove('is-visible');
+  }
 
   function showPage(name) {
     Object.values(pages).forEach((p) => p.classList.remove('is-active'));
@@ -52,6 +69,7 @@
     welcomeDone = true;
     clearInterval(welcomeTimer);
     showPage('access');
+    scheduleAccessOverlayReveal();
   }
   countdown.textContent = `Access Hall in ${secondsLeft}`;
   const welcomeTimer = setInterval(() => {
@@ -87,7 +105,8 @@
     event.preventDefault();
     if (DEMO_MODE) {
       setMessage('Open demonstration access granted. · Επιτρέπεται δοκιμαστική πρόσβαση. · Acceso de demostración concedido.', 'success');
-      setTimeout(() => showPage('library'), 220);
+      closeAccessOverlay();
+      setTimeout(() => showPage('library'), ACCESS_EXIT_DELAY);
       return;
     }
     const email = emailInput.value.trim();
@@ -106,12 +125,16 @@
       const data = await postJson(config.VERIFY_OTP_PATH, { email, code });
       if (data.ok !== true) throw new Error(data.message || 'Access denied.');
       setMessage('Access granted. Opening the Library… · Η πρόσβαση εγκρίθηκε. · Acceso concedido.', 'success');
-      setTimeout(() => showPage('library'), 300);
+      closeAccessOverlay();
+      setTimeout(() => showPage('library'), ACCESS_EXIT_DELAY);
     } catch (err) {
       setMessage(err.message || 'The email or OTP was not accepted.', 'error');
     } finally { verifyButton.disabled = false; }
   });
-  $('backToAccess').addEventListener('click', () => showPage('access'));
+  $('backToAccess').addEventListener('click', () => {
+    showPage('access');
+    scheduleAccessOverlayReveal();
+  });
 
   const knowledgeLink = $('knowledgeLink');
   knowledgeLink.href = config.KNOWLEDGE_LIBRARY_URL || '#';

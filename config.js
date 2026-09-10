@@ -12,6 +12,12 @@ window.APP_CONFIG = {
 
   WELCOME_SECONDS: 7,
 
+  // PAGE 2 timing: the unique access-gate background is shown alone first,
+  // then the email/OTP form fades in; after the form is submitted/closed,
+  // the background is shown alone again before the Library opens.
+  ACCESS_REVEAL_DELAY_MS: 4000,
+  ACCESS_EXIT_DELAY_MS: 4000,
+
   // The gold symbol on page 3 opens this link in a new tab.
   KNOWLEDGE_LIBRARY_URL: "https://share.google/Bjj7P0O4Wed4X2wu2"
 };
