@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070504" />
+  <meta name="description" content="Ο Διαβήτης — Digital Library of the National Grand Lodge of Greece" />
+  <title>Ο Διαβήτης · The Compass — Digital Library</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <main id="app" aria-live="polite">
+    <!-- PAGE 1 — WELCOME -->
+    <section id="pageWelcome" class="page page-welcome is-active" aria-label="Welcome">
+      <img class="welcome-image" src="assets/welcome.jpg" alt="Welcome to the Digital Library" />
+      <div class="welcome-shade" aria-hidden="true"></div>
+      <div class="welcome-controls">
+        <div id="welcomeCountdown" class="welcome-countdown">Access Hall in 7</div>
+        <button id="welcomeEnter" class="welcome-button" type="button">
+          Enter · Είσοδος · Entrar
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGE 2 — LIBRARY ACCESS VERIFICATION -->
+    <section id="pageAccess" class="page page-access" aria-label="Library Access Verification">
+      <img class="access-background" src="assets/access-gate.jpg" alt="Vatican-inspired ceremonial entrance to the library" />
+      <div class="access-vignette" aria-hidden="true"></div>
+
+      <div class="access-overlay">
+        <section class="access-panel" aria-labelledby="accessTitle">
+          <div class="panel-crest-wrap">
+            <img class="panel-crest" src="assets/nglg-emblem.jpg" alt="Emblem of the National Grand Lodge of Greece" />
+          </div>
+
+          <p class="access-kicker">National Grand Lodge of Greece · Εθνική Μεγάλη Στοά της Ελλάδος</p>
+          <h1 id="accessTitle">Library Access Verification</h1>
+          <p class="access-title-trilingual">Έλεγχος Πρόσβασης Βιβλιοθήκης · Verificación de Acceso a la Biblioteca</p>
+
+          <div class="language-notes">
+            <article>
+              <h2>Ελληνικά</h2>
+              <p>Συμπληρώστε τη διεύθυνση email σας. Όταν ενεργοποιηθεί ο έλεγχος, το σύστημα θα εξετάζει αν το email είναι εγκεκριμένο και καταχωρισμένο στη βάση δεδομένων. Εφόσον είναι αποδεκτό, θα αποστέλλεται προσωπικός κωδικός μίας χρήσης (OTP). Πληκτρολογήστε τον κωδικό για να ανοίξει η Βιβλιοθήκη.</p>
+            </article>
+            <article>
+              <h2>English</h2>
+              <p>Enter your email address. When secure access is activated, the system will check whether the address is approved and registered in the database. If accepted, a personal one-time password (OTP) will be sent to that email. Enter the code to unlock the Library.</p>
+            </article>
+            <article>
+              <h2>Español</h2>
+              <p>Introduzca su dirección de correo electrónico. Cuando se active el acceso seguro, el sistema comprobará si la dirección está aprobada y registrada en la base de datos. Si es aceptada, recibirá un código personal de un solo uso (OTP). Introduzca el código para abrir la Biblioteca.</p>
+            </article>
+          </div>
+
+          <div id="demoNotice" class="demo-notice">
+            <strong>Open demonstration access · Ανοικτή δοκιμαστική πρόσβαση · Acceso de demostración abierto</strong>
+            <span>For the present stage, entry is available without verification. The email + OTP structure is already prepared for later activation.</span>
+          </div>
+
+          <form id="accessForm" class="access-form" novalidate>
+            <label class="field-group">
+              <span>Email · Ηλεκτρονική διεύθυνση · Correo electrónico</span>
+              <input id="emailInput" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" />
+            </label>
+
+            <div class="button-row">
+              <button id="requestOtpButton" class="secondary-button" type="button">
+                Send OTP · Αποστολή OTP · Enviar OTP
+              </button>
+            </div>
+
+            <label class="field-group">
+              <span>Access code / OTP · Κωδικός πρόσβασης · Código de acceso</span>
+              <input id="otpInput" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="••••••" />
+            </label>
+
+            <button id="verifyButton" class="primary-button" type="submit">
+              Open the Library · Άνοιγμα Βιβλιοθήκης · Abrir la Biblioteca
+            </button>
+          </form>
+
+          <p id="accessMessage" class="access-message" role="status"></p>
+          <div class="access-credit">Power and engineered by RW Bro Dimitrios Skiadopoulos</div>
+        </section>
+      </div>
+    </section>
+
+    <!-- PAGE 3 — THE REAL LIBRARY -->
+    <section id="pageLibrary" class="page page-library" aria-label="The real library">
+      <div class="library-stage" id="libraryStage">
+        <div class="library-canvas" id="libraryCanvas">
+          <img id="libraryImage" src="assets/library-main.jpg" alt="The Digital Library of Ο Διαβήτης" />
+          <a id="knowledgeLink" class="knowledge-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open Tektonikes Omilies digital library in a new tab" title="Τεκτονικές Ομιλίες — Ψηφιακή Βιβλιοθήκη"></a>
+        </div>
+      </div>
+
+      <button id="backToAccess" class="back-button" type="button" aria-label="Back to access page">←</button>
+      <div class="library-credit">Power and engineered by RW Bro Dimitrios Skiadopoulos</div>
+    </section>
+  </main>
+
+  <!-- ISSUE MODAL -->
+  <div id="issueModal" class="issue-modal" hidden>
+    <div class="issue-dialog" role="dialog" aria-modal="true" aria-labelledby="issueTitle">
+      <button id="closeIssue" class="modal-close" type="button" aria-label="Close">×</button>
+      <div class="issue-grid">
+        <div class="issue-cover-frame">
+          <img id="issueCover" class="issue-cover" alt="Magazine cover" />
+          <div id="issueCoverFallback" class="issue-cover-fallback" hidden>
+            <strong>Ο ΔΙΑΒΗΤΗΣ</strong>
+            <span id="issueFallbackYear"></span>
+          </div>
+        </div>
+        <div class="issue-copy">
+          <p class="issue-kicker">Annual Archive · Ετήσιο Αρχείο</p>
+          <h2 id="issueTitle"></h2>
+          <p id="issueMeta" class="issue-meta"></p>
+          <p id="issueSummary" class="issue-summary"></p>
+          <div class="issue-actions">
+            <a id="issuePdf" class="issue-pdf" href="#" target="_blank" rel="noopener noreferrer">Open PDF · Άνοιγμα PDF · Abrir PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>
