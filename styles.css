@@ -101,6 +101,10 @@ button,a{-webkit-tap-highlight-color:transparent}
 @media(max-width:620px){
   .welcome-controls{flex-direction:column;gap:8px}
   .welcome-countdown{font-size:10px}.welcome-button{font-size:12px}
+  /* A 4:3 welcome photo letterboxes badly on a tall phone screen with
+     object-fit:contain; cover it full-bleed instead (the composition is
+     centered/symmetric so a side crop reads fine). */
+  .welcome-image{object-fit:cover}
   .access-overlay{padding:11px;align-items:center}
   .access-panel{width:96vw;padding:16px 13px;outline-offset:4px}
   .panel-crest-wrap{width:86px;height:86px}
@@ -111,5 +115,12 @@ button,a{-webkit-tap-highlight-color:transparent}
   .field-group input,.secondary-button,.primary-button{height:44px}
   .issue-dialog{padding:18px 14px}.issue-grid{grid-template-columns:1fr}.issue-cover-frame{min-height:auto}.issue-cover{width:min(180px,72vw);max-height:40dvh}.issue-cover-fallback{width:min(180px,72vw)}
   .library-credit{font-size:9px;padding:6px 10px;white-space:normal;text-align:center}
+  /* On a narrow phone the aspect-ratio-locked canvas (min(100vw,177.62vh))
+     shrinks to a ~200px-tall strip, squeezing all three shelf rows' year
+     hotspots into an overlapping, unreadable mess. Let the canvas render
+     at a workable size and rely on the stage's existing scroll instead of
+     forcing the whole image to fit one small screen. */
+  .library-stage{align-items:start;justify-items:start}
+  .library-canvas{width:max(100vw,900px)}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
