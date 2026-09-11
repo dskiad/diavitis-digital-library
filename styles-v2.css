@@ -97,3 +97,43 @@
   .archive-cover{width:min(160px,100%);max-height:36dvh}.archive-actions{gap:5px}
   .archive-actions .issue-pdf{font-size:9px;padding:7px 8px}.cover-source-link{font-size:9px}.year-label{font-size:9px;min-width:35px}
 }
+
+/* WELCOME MESSAGE FROM THE GRAND MASTER — same Vatican gold/parchment
+   treatment as the access panel, shown as a dismissible pop-up on load. */
+.wm-modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:clamp(12px,2.4vw,34px)}
+.wm-modal[hidden]{display:none}
+.wm-backdrop{position:absolute;inset:0;background:rgba(3,2,1,.78);backdrop-filter:blur(10px)}
+.wm-panel{
+  position:relative;width:min(760px,94vw);max-height:92dvh;overflow:auto;padding:clamp(18px,2.4vw,30px);
+  border:2px solid rgba(206,157,68,.78);outline:1px solid rgba(255,230,167,.25);outline-offset:7px;
+  background-image:linear-gradient(180deg,rgba(255,250,234,.94),rgba(233,218,184,.92)),url('assets/emblem-watermark.webp');
+  background-position:center,center 55%;background-size:auto,58% auto;background-repeat:no-repeat,no-repeat;
+  color:var(--ink);box-shadow:0 30px 95px rgba(0,0,0,.72),inset 0 0 45px rgba(122,83,34,.09)
+}
+.wm-panel:before,.wm-panel:after{content:"◆";position:absolute;top:12px;color:#a26e25;font-size:15px}
+.wm-panel:before{left:16px}.wm-panel:after{right:16px}
+.wm-portrait-wrap{width:min(168px,42vw);aspect-ratio:2/3;margin:0 auto 12px;padding:5px;border-radius:6px;background:linear-gradient(155deg,#fff4c9,#d0a351 40%,#6f3d17 82%,#2c1308);box-shadow:0 0 0 2px rgba(111,68,23,.18),0 12px 30px rgba(0,0,0,.35)}
+.wm-portrait{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:3px;display:block}
+.wm-kicker{text-align:center;margin:0;color:#7d5b2b;font-size:11px;text-transform:uppercase;letter-spacing:.16em}
+.wm-title{text-align:center;margin:7px 0 14px;color:#24170d;font-weight:500;font-size:clamp(19px,2.4vw,26px)}
+.wm-lang-switch{display:flex;justify-content:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+.wm-lang-btn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:1px solid #bd954e;background:linear-gradient(#f8efdc,#e2cfaa);color:#34220f;font-weight:700;font-size:12.5px;letter-spacing:.02em;cursor:pointer}
+.wm-lang-btn .wm-flag{font-size:16px;line-height:1}
+.wm-lang-btn:hover{filter:brightness(1.06)}
+.wm-lang-btn[aria-pressed="true"]{background:linear-gradient(180deg,#10336b,#061b3f);color:#ffe5a5;border-color:#0d326c;box-shadow:inset 0 0 0 1px rgba(255,219,137,.18)}
+.wm-body-grid{display:grid;gap:12px;margin-bottom:16px}
+.wm-body{padding:14px 16px;border:1px solid rgba(132,89,34,.28);background:rgba(255,255,255,.36)}
+.wm-body[hidden]{display:none}
+.wm-body h3{margin:0 0 8px;color:#0c2a59;font-size:15px;text-align:center}
+.wm-body p{margin:0 0 9px;font-size:13px;line-height:1.55;color:#3e2d1b}
+.wm-body p:last-child{margin-bottom:0}
+.wm-signature{margin-top:12px !important;padding-top:10px;border-top:1px solid rgba(119,81,31,.25);font-style:italic;font-weight:700;text-align:right;color:#5b4022}
+.wm-close-button{display:block;width:100%;height:48px;border:1px solid #bd954e;cursor:pointer;font-weight:700;letter-spacing:.02em;background:linear-gradient(180deg,#10336b,#061b3f);color:#ffe5a5;box-shadow:inset 0 0 0 1px rgba(255,219,137,.18)}
+.wm-close-button:hover{filter:brightness(1.06)}
+@media(max-width:620px){
+  .wm-panel{width:96vw;padding:16px 13px;outline-offset:4px}
+  .wm-portrait-wrap{width:min(140px,46vw)}
+  .wm-title{font-size:18px}
+  .wm-lang-btn{height:40px;padding:0 12px;font-size:12px}
+  .wm-body h3{font-size:14px}.wm-body p{font-size:12.5px}
+}

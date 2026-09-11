@@ -63,6 +63,7 @@
 
   let secondsLeft = WELCOME_SECONDS;
   let welcomeDone = false;
+  let welcomeTimer = null;
   const countdown = $('welcomeCountdown');
   function enterAccessPage() {
     if (welcomeDone) return;
@@ -71,13 +72,36 @@
     showPage('access');
     scheduleAccessOverlayReveal();
   }
-  countdown.textContent = `Access Hall in ${secondsLeft}`;
-  const welcomeTimer = setInterval(() => {
-    secondsLeft -= 1;
-    if (secondsLeft <= 0) enterAccessPage();
-    else countdown.textContent = `Access Hall in ${secondsLeft}`;
-  }, 1000);
+  function startWelcomeCountdown() {
+    countdown.textContent = `Access Hall in ${secondsLeft}`;
+    welcomeTimer = setInterval(() => {
+      secondsLeft -= 1;
+      if (secondsLeft <= 0) enterAccessPage();
+      else countdown.textContent = `Access Hall in ${secondsLeft}`;
+    }, 1000);
+  }
   $('welcomeEnter').addEventListener('click', enterAccessPage);
+
+  // WELCOME MESSAGE FROM THE GRAND MASTER — shown on load, over page 1.
+  // The page-1 countdown only starts once the visitor closes it.
+  const wmModal = $('welcomeMessageModal');
+  if (wmModal) {
+    document.querySelectorAll('.wm-lang-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        const block = document.querySelector(`.wm-body[data-lang-block="${lang}"]`);
+        const nowShown = block.hidden;
+        block.hidden = !nowShown;
+        btn.setAttribute('aria-pressed', String(nowShown));
+      });
+    });
+    $('wmClose').addEventListener('click', () => {
+      wmModal.hidden = true;
+      startWelcomeCountdown();
+    });
+  } else {
+    startWelcomeCountdown();
+  }
 
   if (!DEMO_MODE) demoNotice.hidden = true;
   requestOtpButton.addEventListener('click', async () => {
