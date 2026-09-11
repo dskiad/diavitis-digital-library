@@ -33,7 +33,13 @@ button,a{-webkit-tap-highlight-color:transparent}
 .access-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,.02) 25%,rgba(0,0,0,.44) 100%),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.16))}
 .access-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:clamp(12px,2.4vw,34px);overflow:auto;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s ease}
 .access-overlay.is-visible{opacity:1;visibility:visible;pointer-events:auto}
-.access-panel{position:relative;width:min(820px,94vw);max-height:94dvh;overflow:auto;padding:clamp(18px,2.4vw,30px);border:2px solid rgba(206,157,68,.78);outline:1px solid rgba(255,230,167,.25);outline-offset:7px;background:linear-gradient(180deg,rgba(255,250,234,.94),rgba(233,218,184,.92));color:var(--ink);box-shadow:0 30px 95px rgba(0,0,0,.72),inset 0 0 45px rgba(122,83,34,.09)}
+.access-panel{
+  position:relative;width:min(820px,94vw);max-height:94dvh;overflow:auto;padding:clamp(18px,2.4vw,30px);
+  border:2px solid rgba(206,157,68,.78);outline:1px solid rgba(255,230,167,.25);outline-offset:7px;
+  background-image:linear-gradient(180deg,rgba(255,250,234,.94),rgba(233,218,184,.92)),url('assets/emblem-watermark.webp');
+  background-position:center,center 42%;background-size:auto,58% auto;background-repeat:no-repeat,no-repeat;
+  color:var(--ink);box-shadow:0 30px 95px rgba(0,0,0,.72),inset 0 0 45px rgba(122,83,34,.09)
+}
 .access-panel:before,.access-panel:after{content:"◆";position:absolute;top:12px;color:#a26e25;font-size:15px}
 .access-panel:before{left:16px}.access-panel:after{right:16px}
 .panel-crest-wrap{width:116px;height:116px;margin:0 auto 10px;padding:6px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff4c9,#d0a351 33%,#6f3d17 72%,#2c1308);box-shadow:0 0 0 2px rgba(111,68,23,.18),0 9px 26px rgba(0,0,0,.22)}
