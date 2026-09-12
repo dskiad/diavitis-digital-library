@@ -230,6 +230,23 @@
   const libraryCanvas = $('libraryCanvas');
   const issueGrid = document.querySelector('.issue-grid');
 
+  // Year picker — quick way to jump straight to a year's issue(s) without
+  // hunting for its shelf position (especially handy on phones).
+  const yearPicker = $('yearPicker');
+  if (yearPicker) {
+    Object.keys(ISSUES_BY_YEAR).map(Number).sort((a, b) => a - b).forEach((year) => {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      yearPicker.appendChild(option);
+    });
+    yearPicker.addEventListener('change', () => {
+      const year = Number(yearPicker.value);
+      if (year) openIssue(year);
+      yearPicker.value = '';
+    });
+  }
+
   function animateBook(button) {
     const canvasRect = libraryCanvas.getBoundingClientRect();
     const rect = button.getBoundingClientRect();
