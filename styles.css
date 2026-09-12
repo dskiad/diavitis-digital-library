@@ -29,12 +29,20 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 /* PAGE 2 */
 .page-access{background:#100803}
-.access-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
-.access-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,.02) 25%,rgba(0,0,0,.44) 100%),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.16))}
-.access-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:clamp(12px,2.4vw,34px);overflow:auto;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s ease}
+.access-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;cursor:pointer}
+.access-vignette{position:absolute;inset:0;cursor:pointer;background:radial-gradient(ellipse at center,rgba(0,0,0,.02) 25%,rgba(0,0,0,.44) 100%),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.16))}
+.access-countdown{
+  position:fixed;z-index:30;left:50%;top:max(14px,env(safe-area-inset-top));transform:translateX(-50%);
+  padding:9px 18px;border-radius:999px;border:1px solid rgba(255,220,146,.5);
+  background:rgba(6,4,2,.64);backdrop-filter:blur(8px);color:#ffe4a0;
+  font-size:12.5px;letter-spacing:.03em;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  pointer-events:none
+}
+.access-countdown[hidden]{display:none}
+.access-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:clamp(12px,2.4vw,34px);overflow:auto;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s ease;cursor:pointer}
 .access-overlay.is-visible{opacity:1;visibility:visible;pointer-events:auto}
 .access-panel{
-  position:relative;width:min(820px,94vw);max-height:94dvh;overflow:auto;padding:clamp(18px,2.4vw,30px);
+  position:relative;cursor:default;width:min(820px,94vw);max-height:94dvh;overflow:auto;padding:clamp(18px,2.4vw,30px);
   border:2px solid rgba(206,157,68,.78);outline:1px solid rgba(255,230,167,.25);outline-offset:7px;
   background-image:linear-gradient(180deg,rgba(255,250,234,.94),rgba(233,218,184,.92)),url('assets/emblem-watermark.webp');
   background-position:center,center 42%;background-size:auto,58% auto;background-repeat:no-repeat,no-repeat;
@@ -126,11 +134,16 @@ button,a{-webkit-tap-highlight-color:transparent}
 .year-browser-modal[hidden]{display:none}
 .year-browser-backdrop{position:absolute;inset:0;background:rgba(3,2,1,.78);backdrop-filter:blur(10px)}
 .year-browser-dialog{
-  position:relative;width:min(940px,95vw);max-height:88dvh;display:flex;flex-direction:column;
-  padding:22px;border:1px solid #a87836;outline:1px solid rgba(230,194,116,.2);outline-offset:6px;
-  background:linear-gradient(160deg,#25130c,#0d0906);box-shadow:0 32px 100px rgba(0,0,0,.85)
+  position:relative;width:min(940px,95vw);max-height:88dvh;display:flex;flex-direction:column;overflow:hidden;
+  padding:28px;border:2px solid rgba(206,157,68,.78);outline:1px solid rgba(255,230,167,.28);outline-offset:7px;
+  background-image:linear-gradient(160deg,rgba(37,19,12,.94),rgba(13,9,6,.96)),url('assets/emblem-watermark-dark.webp');
+  background-position:center,center 40%;background-size:auto,60% auto;background-repeat:no-repeat,no-repeat;
+  box-shadow:0 32px 100px rgba(0,0,0,.85)
 }
-.year-browser-title{margin:0 0 14px;text-align:center;color:#f4d77f;font-weight:500;font-size:clamp(20px,2.6vw,28px)}
+.year-browser-dialog:before,.year-browser-dialog:after{content:"◆";position:absolute;top:14px;color:#e3c065;font-size:15px}
+.year-browser-dialog:before{left:18px}
+.year-browser-dialog:after{right:58px}
+.year-browser-title{margin:0 0 14px;text-align:center;color:#f4d77f;font-weight:500;font-size:clamp(20px,2.6vw,28px);text-shadow:0 2px 8px rgba(0,0,0,.6)}
 .year-browser-body{display:grid;grid-template-columns:150px 1fr;gap:20px;flex:1;min-height:0}
 .year-browser-list{
   display:flex;flex-direction:column;gap:6px;overflow-y:auto;padding-right:10px;
@@ -145,10 +158,21 @@ button,a{-webkit-tap-highlight-color:transparent}
 .year-browser-preview{overflow-y:auto;padding-left:2px}
 .year-browser-preview-heading{margin:0 0 14px;color:#f4d77f;font-size:20px;font-weight:500;text-align:center}
 .year-browser-placeholder{margin-top:40px;text-align:center;color:#a99169;font-size:14px;line-height:1.6}
+.year-browser-footer{
+  margin-top:18px;padding-top:16px;flex:0 0 auto;
+  border-top:1px solid rgba(221,184,99,.25);
+  display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center
+}
+.ybf-emblem{width:92px;height:auto;opacity:.94;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+.ybf-title{margin:2px 0 0;color:#e3c065;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase}
+.ybf-credit{margin:0;color:#8a7454;font-size:10.5px;letter-spacing:.03em}
 @media(max-width:620px){
   .year-browser-dialog{padding:16px}
   .year-browser-body{grid-template-columns:96px 1fr;gap:12px}
   .year-browser-year-btn{padding:8px 6px;font-size:13px}
+  .ybf-emblem{width:70px}
+  .ybf-title{font-size:11px}
+  .ybf-credit{font-size:9.5px}
 }
 
 /* ISSUE MODAL */
