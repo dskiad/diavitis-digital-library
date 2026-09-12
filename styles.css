@@ -93,6 +93,52 @@ button,a{-webkit-tap-highlight-color:transparent}
   78%{opacity:1;transform:translate(-50%,0)}
   100%{opacity:0;transform:translate(-50%,-6px)}
 }
+.year-picker{
+  appearance:none;-webkit-appearance:none;
+  position:fixed;z-index:30;right:14px;top:max(14px,env(safe-area-inset-top));
+  display:flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;
+  border:1px solid rgba(245,213,144,.44);background:rgba(5,4,3,.56);backdrop-filter:blur(7px);cursor:pointer
+}
+.year-picker:hover{background:rgba(20,14,8,.66)}
+.year-picker-label{font-size:11px;letter-spacing:.06em;white-space:nowrap;color:#d6c19b}
+.year-picker-value{
+  display:inline-flex;align-items:center;gap:8px;color:#ffe5a5;
+  font:700 13px Georgia,"Times New Roman",serif;letter-spacing:.02em;white-space:nowrap
+}
+.year-picker-value:after{
+  content:"";width:10px;height:7px;flex:0 0 auto;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'><path d='M1 1l4 4 4-4' stroke='%23ffe5a5' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center/10px 7px
+}
+
+/* YEAR BROWSER */
+.year-browser-modal{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:18px}
+.year-browser-modal[hidden]{display:none}
+.year-browser-backdrop{position:absolute;inset:0;background:rgba(3,2,1,.78);backdrop-filter:blur(10px)}
+.year-browser-dialog{
+  position:relative;width:min(940px,95vw);max-height:88dvh;display:flex;flex-direction:column;
+  padding:22px;border:1px solid #a87836;outline:1px solid rgba(230,194,116,.2);outline-offset:6px;
+  background:linear-gradient(160deg,#25130c,#0d0906);box-shadow:0 32px 100px rgba(0,0,0,.85)
+}
+.year-browser-title{margin:0 0 14px;text-align:center;color:#f4d77f;font-weight:500;font-size:clamp(20px,2.6vw,28px)}
+.year-browser-body{display:grid;grid-template-columns:150px 1fr;gap:20px;flex:1;min-height:0}
+.year-browser-list{
+  display:flex;flex-direction:column;gap:6px;overflow-y:auto;padding-right:10px;
+  border-right:1px solid rgba(221,184,99,.22)
+}
+.year-browser-year-btn{
+  padding:9px 12px;border:1px solid rgba(221,184,99,.28);background:rgba(255,255,255,.03);
+  color:#e3d7bf;text-align:center;cursor:pointer;font:700 14px Georgia,"Times New Roman",serif;letter-spacing:.02em
+}
+.year-browser-year-btn:hover{background:rgba(255,208,99,.1);border-color:rgba(240,188,71,.45)}
+.year-browser-year-btn[aria-selected="true"]{background:linear-gradient(180deg,#10336b,#061b3f);color:#ffe5a5;border-color:#0d326c;box-shadow:inset 0 0 0 1px rgba(255,219,137,.18)}
+.year-browser-preview{overflow-y:auto;padding-left:2px}
+.year-browser-preview-heading{margin:0 0 14px;color:#f4d77f;font-size:20px;font-weight:500;text-align:center}
+.year-browser-placeholder{margin-top:40px;text-align:center;color:#a99169;font-size:14px;line-height:1.6}
+@media(max-width:620px){
+  .year-browser-dialog{padding:16px}
+  .year-browser-body{grid-template-columns:96px 1fr;gap:12px}
+  .year-browser-year-btn{padding:8px 6px;font-size:13px}
+}
 
 /* ISSUE MODAL */
 .issue-modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;background:rgba(3,2,1,.78);backdrop-filter:blur(10px)}
@@ -134,6 +180,16 @@ button,a{-webkit-tap-highlight-color:transparent}
   .field-group input,.secondary-button,.primary-button{height:44px}
   .issue-dialog{padding:18px 14px}.issue-grid{grid-template-columns:1fr}.issue-cover-frame{min-height:auto}.issue-cover{width:min(180px,72vw);max-height:40dvh}.issue-cover-fallback{width:min(180px,72vw)}
   .library-credit{font-size:9px;padding:6px 10px;white-space:normal;text-align:center}
+  /* Keep the hint narrow so it wraps into a tall, centered column instead
+     of a wide banner that would collide with the back button and year
+     picker sharing the same top row on a narrow screen. */
+  /* The top row is already busy with the back button and year picker on
+     a narrow screen, so move the hint down above the credit line instead
+     of fighting them for the same corner. */
+  .library-hint{top:auto;bottom:max(52px,calc(env(safe-area-inset-bottom) + 46px));max-width:88vw;padding:9px 14px;font-size:12px}
+  .year-picker{right:10px;height:40px;padding:0 12px;gap:6px}
+  .year-picker-label{display:none}
+  .year-picker-value{font-size:12px}
   /* On a narrow phone the aspect-ratio-locked canvas (min(100vw,177.62vh))
      shrinks to a ~200px-tall strip, squeezing all three shelf rows' year
      hotspots into an overlapping, unreadable mess. Let the canvas render
