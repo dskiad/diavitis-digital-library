@@ -18,6 +18,17 @@ window.APP_CONFIG = {
   ACCESS_REVEAL_DELAY_MS: 4000,
   ACCESS_EXIT_DELAY_MS: 4000,
 
+  // Access Gate (page 2): shows a countdown pill once the page is active;
+  // it auto-continues to the next step when it reaches zero, or
+  // immediately if the visitor clicks the background. Demo mode only —
+  // real OTP verification is never skipped.
+  ACCESS_COUNTDOWN_SECONDS: 12,
+
+  // Temporarily hide the Library page's bookshelf and open the Year
+  // Browser directly instead, right after the Access Gate. Set to false
+  // to restore the normal Library page.
+  LIBRARY_PAGE_HIDDEN: true,
+
   // The gold symbol on page 3 opens this link in a new tab.
   KNOWLEDGE_LIBRARY_URL: "https://share.google/Bjj7P0O4Wed4X2wu2"
 };

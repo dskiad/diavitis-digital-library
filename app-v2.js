@@ -10,6 +10,13 @@
   // again before the Library opens.
   const ACCESS_REVEAL_DELAY = Number(config.ACCESS_REVEAL_DELAY_MS || 4000);
   const ACCESS_EXIT_DELAY = Number(config.ACCESS_EXIT_DELAY_MS || 4000);
+  // Access Gate: a countdown pill that auto-continues when it reaches
+  // zero, or immediately if the visitor clicks the background. Demo
+  // mode only — real OTP verification is never skipped this way.
+  const ACCESS_COUNTDOWN_SECONDS = Number(config.ACCESS_COUNTDOWN_SECONDS || 12);
+  // Temporarily hide the Library page's bookshelf and open the Year
+  // Browser directly instead, right after the Access Gate.
+  const LIBRARY_PAGE_HIDDEN = config.LIBRARY_PAGE_HIDDEN === true;
   const ARCHIVE_SOURCE_URL = 'https://drive.google.com/drive/folders/1znNVAI73aTP0xJJcPm0kSI-mUymVtYHC';
 
   const pages = {
@@ -25,7 +32,10 @@
   const requestOtpButton = $('requestOtpButton');
   const verifyButton = $('verifyButton');
   const accessOverlay = $('accessOverlay');
+  const accessCountdownEl = $('accessCountdown');
   let accessRevealTimer = null;
+  let accessCountdownTimer = null;
+  let accessAdvanceDone = false;
 
   function scheduleAccessOverlayReveal() {
     accessOverlay.classList.remove('is-visible');
@@ -40,6 +50,50 @@
   function showPage(name) {
     Object.values(pages).forEach((p) => p.classList.remove('is-active'));
     pages[name].classList.add('is-active');
+  }
+
+  // Library page: for now, the bookshelf can be hidden in favour of
+  // opening the Year Browser directly (see LIBRARY_PAGE_HIDDEN above).
+  function enterLibraryPage() {
+    showPage('library');
+    if (LIBRARY_PAGE_HIDDEN) openYearBrowser();
+  }
+
+  // Access Gate: countdown that auto-continues (demo mode only), or an
+  // immediate continue if the visitor clicks the background instead.
+  function stopAccessCountdown() {
+    clearInterval(accessCountdownTimer);
+    if (accessCountdownEl) accessCountdownEl.hidden = true;
+  }
+  function advanceFromAccess() {
+    if (accessAdvanceDone) return;
+    accessAdvanceDone = true;
+    stopAccessCountdown();
+    setMessage('Open demonstration access granted. · Επιτρέπεται δοκιμαστική πρόσβαση. · Acceso de demostración concedido.', 'success');
+    closeAccessOverlay();
+    setTimeout(enterLibraryPage, ACCESS_EXIT_DELAY);
+  }
+  function startAccessCountdown() {
+    if (!accessCountdownEl) return;
+    accessAdvanceDone = false;
+    let secondsLeft = ACCESS_COUNTDOWN_SECONDS;
+    const render = () => {
+      accessCountdownEl.textContent = `Αυτόματη μετάβαση σε ${secondsLeft} · Auto-continuing in ${secondsLeft}`;
+    };
+    accessCountdownEl.hidden = false;
+    render();
+    clearInterval(accessCountdownTimer);
+    accessCountdownTimer = setInterval(() => {
+      secondsLeft -= 1;
+      if (secondsLeft <= 0) advanceFromAccess();
+      else render();
+    }, 1000);
+  }
+  function activateAccessPage() {
+    showPage('access');
+    scheduleAccessOverlayReveal();
+    if (DEMO_MODE) startAccessCountdown();
+    else stopAccessCountdown();
   }
   function setMessage(text, type = '') {
     message.textContent = text;
@@ -69,8 +123,7 @@
     if (welcomeDone) return;
     welcomeDone = true;
     clearInterval(welcomeTimer);
-    showPage('access');
-    scheduleAccessOverlayReveal();
+    activateAccessPage();
   }
   function startWelcomeCountdown() {
     countdown.textContent = `Access Hall in ${secondsLeft}`;
@@ -134,9 +187,7 @@
   $('accessForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     if (DEMO_MODE) {
-      setMessage('Open demonstration access granted. · Επιτρέπεται δοκιμαστική πρόσβαση. · Acceso de demostración concedido.', 'success');
-      closeAccessOverlay();
-      setTimeout(() => showPage('library'), ACCESS_EXIT_DELAY);
+      advanceFromAccess();
       return;
     }
     const email = emailInput.value.trim();
@@ -155,15 +206,25 @@
       const data = await postJson(config.VERIFY_OTP_PATH, { email, code });
       if (data.ok !== true) throw new Error(data.message || 'Access denied.');
       setMessage('Access granted. Opening the Library… · Η πρόσβαση εγκρίθηκε. · Acceso concedido.', 'success');
+      accessAdvanceDone = true;
+      stopAccessCountdown();
       closeAccessOverlay();
-      setTimeout(() => showPage('library'), ACCESS_EXIT_DELAY);
+      setTimeout(enterLibraryPage, ACCESS_EXIT_DELAY);
     } catch (err) {
       setMessage(err.message || 'The email or OTP was not accepted.', 'error');
     } finally { verifyButton.disabled = false; }
   });
-  $('backToAccess').addEventListener('click', () => {
-    showPage('access');
-    scheduleAccessOverlayReveal();
+  $('backToAccess').addEventListener('click', activateAccessPage);
+
+  // Clicking the Access Gate background (outside the form panel) skips
+  // straight ahead, same as letting the countdown run out. Demo mode only.
+  function handleAccessBackgroundClick() {
+    if (DEMO_MODE) advanceFromAccess();
+  }
+  document.querySelector('.access-background').addEventListener('click', handleAccessBackgroundClick);
+  document.querySelector('.access-vignette').addEventListener('click', handleAccessBackgroundClick);
+  accessOverlay.addEventListener('click', (e) => {
+    if (e.target === accessOverlay) handleAccessBackgroundClick();
   });
 
   const knowledgeLink = $('knowledgeLink');
@@ -253,6 +314,11 @@
   }
 
   function closeYearBrowser() { yearBrowserModal.hidden = true; }
+  function openYearBrowser() {
+    yearBrowserList.querySelectorAll('.year-browser-year-btn').forEach((b) => b.setAttribute('aria-selected', 'false'));
+    yearBrowserPreview.innerHTML = YEAR_PREVIEW_PLACEHOLDER;
+    yearBrowserModal.hidden = false;
+  }
 
   if (yearPickerButton && yearBrowserModal) {
     Object.keys(ISSUES_BY_YEAR).map(Number).sort((a, b) => a - b).forEach((year) => {
@@ -271,16 +337,21 @@
       yearBrowserList.appendChild(btn);
     });
 
-    yearPickerButton.addEventListener('click', () => {
-      yearBrowserList.querySelectorAll('.year-browser-year-btn').forEach((b) => b.setAttribute('aria-selected', 'false'));
-      yearBrowserPreview.innerHTML = YEAR_PREVIEW_PLACEHOLDER;
-      yearBrowserModal.hidden = false;
-    });
+    yearPickerButton.addEventListener('click', openYearBrowser);
     $('closeYearBrowser').addEventListener('click', closeYearBrowser);
     yearBrowserModal.querySelector('.year-browser-backdrop').addEventListener('click', closeYearBrowser);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !yearBrowserModal.hidden) closeYearBrowser();
     });
+  }
+
+  // Temporarily hide the bookshelf itself while LIBRARY_PAGE_HIDDEN is on
+  // (see enterLibraryPage, which opens the Year Browser automatically).
+  if (LIBRARY_PAGE_HIDDEN) {
+    const libraryStage = $('libraryStage');
+    const libraryHint = document.querySelector('.library-hint');
+    if (libraryStage) libraryStage.hidden = true;
+    if (libraryHint) libraryHint.hidden = true;
   }
 
   function animateBook(button) {
