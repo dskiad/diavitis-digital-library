@@ -230,20 +230,56 @@
   const libraryCanvas = $('libraryCanvas');
   const issueGrid = document.querySelector('.issue-grid');
 
-  // Year picker — quick way to jump straight to a year's issue(s) without
-  // hunting for its shelf position (especially handy on phones).
-  const yearPicker = $('yearPicker');
-  if (yearPicker) {
+  // Year browser — clicking the year pill opens a dialog with the full
+  // year list on the left and a live cover preview on the right, so you
+  // can see what you're picking before opening a PDF.
+  const yearPickerButton = $('yearPickerButton');
+  const yearBrowserModal = $('yearBrowserModal');
+  const yearBrowserList = $('yearBrowserList');
+  const yearBrowserPreview = $('yearBrowserPreview');
+  const YEAR_PREVIEW_PLACEHOLDER = yearBrowserPreview ? yearBrowserPreview.innerHTML : '';
+
+  function renderYearPreview(year) {
+    const issues = ISSUES_BY_YEAR[year] || [];
+    yearBrowserPreview.innerHTML = '';
+    const heading = document.createElement('p');
+    heading.className = 'year-browser-preview-heading';
+    heading.textContent = `Ο Διαβήτης · ${year}`;
+    yearBrowserPreview.appendChild(heading);
+    const grid = document.createElement('div');
+    grid.className = 'archive-volume-grid';
+    issues.forEach((item) => grid.appendChild(issueCard(item)));
+    yearBrowserPreview.appendChild(grid);
+  }
+
+  function closeYearBrowser() { yearBrowserModal.hidden = true; }
+
+  if (yearPickerButton && yearBrowserModal) {
     Object.keys(ISSUES_BY_YEAR).map(Number).sort((a, b) => a - b).forEach((year) => {
-      const option = document.createElement('option');
-      option.value = year;
-      option.textContent = year;
-      yearPicker.appendChild(option);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'year-browser-year-btn';
+      btn.textContent = year;
+      btn.setAttribute('role', 'option');
+      btn.setAttribute('aria-selected', 'false');
+      btn.addEventListener('click', () => {
+        yearBrowserList.querySelectorAll('.year-browser-year-btn').forEach((b) => {
+          b.setAttribute('aria-selected', String(b === btn));
+        });
+        renderYearPreview(year);
+      });
+      yearBrowserList.appendChild(btn);
     });
-    yearPicker.addEventListener('change', () => {
-      const year = Number(yearPicker.value);
-      if (year) openIssue(year);
-      yearPicker.value = '';
+
+    yearPickerButton.addEventListener('click', () => {
+      yearBrowserList.querySelectorAll('.year-browser-year-btn').forEach((b) => b.setAttribute('aria-selected', 'false'));
+      yearBrowserPreview.innerHTML = YEAR_PREVIEW_PLACEHOLDER;
+      yearBrowserModal.hidden = false;
+    });
+    $('closeYearBrowser').addEventListener('click', closeYearBrowser);
+    yearBrowserModal.querySelector('.year-browser-backdrop').addEventListener('click', closeYearBrowser);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !yearBrowserModal.hidden) closeYearBrowser();
     });
   }
 

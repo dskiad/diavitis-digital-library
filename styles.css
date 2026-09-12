@@ -94,19 +94,51 @@ button,a{-webkit-tap-highlight-color:transparent}
   100%{opacity:0;transform:translate(-50%,-6px)}
 }
 .year-picker{
+  appearance:none;-webkit-appearance:none;
   position:fixed;z-index:30;right:14px;top:max(14px,env(safe-area-inset-top));
   display:flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;
-  border:1px solid rgba(245,213,144,.44);background:rgba(5,4,3,.56);backdrop-filter:blur(7px)
+  border:1px solid rgba(245,213,144,.44);background:rgba(5,4,3,.56);backdrop-filter:blur(7px);cursor:pointer
 }
+.year-picker:hover{background:rgba(20,14,8,.66)}
 .year-picker-label{font-size:11px;letter-spacing:.06em;white-space:nowrap;color:#d6c19b}
-.year-picker select{
-  appearance:none;-webkit-appearance:none;-moz-appearance:none;border:0;outline:none;background-color:transparent;
-  color:#ffe5a5;font:700 13px Georgia,"Times New Roman",serif;letter-spacing:.02em;cursor:pointer;
-  padding-right:16px;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'><path d='M1 1l4 4 4-4' stroke='%23ffe5a5' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat:no-repeat;background-position:right center;background-size:10px 7px
+.year-picker-value{
+  display:inline-flex;align-items:center;gap:8px;color:#ffe5a5;
+  font:700 13px Georgia,"Times New Roman",serif;letter-spacing:.02em;white-space:nowrap
 }
-.year-picker select option{color:#1e160e;background:#fff8ea}
+.year-picker-value:after{
+  content:"";width:10px;height:7px;flex:0 0 auto;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'><path d='M1 1l4 4 4-4' stroke='%23ffe5a5' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center/10px 7px
+}
+
+/* YEAR BROWSER */
+.year-browser-modal{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:18px}
+.year-browser-modal[hidden]{display:none}
+.year-browser-backdrop{position:absolute;inset:0;background:rgba(3,2,1,.78);backdrop-filter:blur(10px)}
+.year-browser-dialog{
+  position:relative;width:min(940px,95vw);max-height:88dvh;display:flex;flex-direction:column;
+  padding:22px;border:1px solid #a87836;outline:1px solid rgba(230,194,116,.2);outline-offset:6px;
+  background:linear-gradient(160deg,#25130c,#0d0906);box-shadow:0 32px 100px rgba(0,0,0,.85)
+}
+.year-browser-title{margin:0 0 14px;text-align:center;color:#f4d77f;font-weight:500;font-size:clamp(20px,2.6vw,28px)}
+.year-browser-body{display:grid;grid-template-columns:150px 1fr;gap:20px;flex:1;min-height:0}
+.year-browser-list{
+  display:flex;flex-direction:column;gap:6px;overflow-y:auto;padding-right:10px;
+  border-right:1px solid rgba(221,184,99,.22)
+}
+.year-browser-year-btn{
+  padding:9px 12px;border:1px solid rgba(221,184,99,.28);background:rgba(255,255,255,.03);
+  color:#e3d7bf;text-align:center;cursor:pointer;font:700 14px Georgia,"Times New Roman",serif;letter-spacing:.02em
+}
+.year-browser-year-btn:hover{background:rgba(255,208,99,.1);border-color:rgba(240,188,71,.45)}
+.year-browser-year-btn[aria-selected="true"]{background:linear-gradient(180deg,#10336b,#061b3f);color:#ffe5a5;border-color:#0d326c;box-shadow:inset 0 0 0 1px rgba(255,219,137,.18)}
+.year-browser-preview{overflow-y:auto;padding-left:2px}
+.year-browser-preview-heading{margin:0 0 14px;color:#f4d77f;font-size:20px;font-weight:500;text-align:center}
+.year-browser-placeholder{margin-top:40px;text-align:center;color:#a99169;font-size:14px;line-height:1.6}
+@media(max-width:620px){
+  .year-browser-dialog{padding:16px}
+  .year-browser-body{grid-template-columns:96px 1fr;gap:12px}
+  .year-browser-year-btn{padding:8px 6px;font-size:13px}
+}
 
 /* ISSUE MODAL */
 .issue-modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;background:rgba(3,2,1,.78);backdrop-filter:blur(10px)}
@@ -157,7 +189,7 @@ button,a{-webkit-tap-highlight-color:transparent}
   .library-hint{top:auto;bottom:max(52px,calc(env(safe-area-inset-bottom) + 46px));max-width:88vw;padding:9px 14px;font-size:12px}
   .year-picker{right:10px;height:40px;padding:0 12px;gap:6px}
   .year-picker-label{display:none}
-  .year-picker select{font-size:12px}
+  .year-picker-value{font-size:12px}
   /* On a narrow phone the aspect-ratio-locked canvas (min(100vw,177.62vh))
      shrinks to a ~200px-tall strip, squeezing all three shelf rows' year
      hotspots into an overlapping, unreadable mess. Let the canvas render
