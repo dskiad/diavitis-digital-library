@@ -313,10 +313,19 @@
     yearBrowserPreview.appendChild(grid);
   }
 
+  // The Year Browser opens with 1995 (the archive's first year) already
+  // selected and previewed, instead of an empty placeholder.
+  const YEAR_BROWSER_DEFAULT_YEAR = 1995;
+
   function closeYearBrowser() { yearBrowserModal.hidden = true; }
   function openYearBrowser() {
-    yearBrowserList.querySelectorAll('.year-browser-year-btn').forEach((b) => b.setAttribute('aria-selected', 'false'));
-    yearBrowserPreview.innerHTML = YEAR_PREVIEW_PLACEHOLDER;
+    const years = Object.keys(ISSUES_BY_YEAR).map(Number).sort((a, b) => a - b);
+    const defaultYear = ISSUES_BY_YEAR[YEAR_BROWSER_DEFAULT_YEAR] ? YEAR_BROWSER_DEFAULT_YEAR : years[0];
+    yearBrowserList.querySelectorAll('.year-browser-year-btn').forEach((b) => {
+      b.setAttribute('aria-selected', String(Number(b.textContent) === defaultYear));
+    });
+    if (defaultYear !== undefined) renderYearPreview(defaultYear);
+    else yearBrowserPreview.innerHTML = YEAR_PREVIEW_PLACEHOLDER;
     yearBrowserModal.hidden = false;
   }
 
