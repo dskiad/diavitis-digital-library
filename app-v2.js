@@ -86,19 +86,25 @@
   // The page-1 countdown only starts once the visitor closes it.
   const wmModal = $('welcomeMessageModal');
   if (wmModal) {
+    function closeWelcomeMessage() {
+      wmModal.hidden = true;
+      startWelcomeCountdown();
+    }
     document.querySelectorAll('.wm-lang-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         const lang = btn.dataset.lang;
         const block = document.querySelector(`.wm-body[data-lang-block="${lang}"]`);
+        const miniContinue = document.querySelector(`.wm-mini-continue[data-lang-block="${lang}"]`);
         const nowShown = block.hidden;
         block.hidden = !nowShown;
+        if (miniContinue) miniContinue.hidden = !nowShown;
         btn.setAttribute('aria-pressed', String(nowShown));
       });
     });
-    $('wmClose').addEventListener('click', () => {
-      wmModal.hidden = true;
-      startWelcomeCountdown();
+    document.querySelectorAll('.wm-mini-continue').forEach((btn) => {
+      btn.addEventListener('click', closeWelcomeMessage);
     });
+    $('wmClose').addEventListener('click', closeWelcomeMessage);
   } else {
     startWelcomeCountdown();
   }
