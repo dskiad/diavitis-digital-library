@@ -72,6 +72,17 @@ button,a{-webkit-tap-highlight-color:transparent}
 .library-stage{position:absolute;inset:0;display:grid;place-items:center;overflow:auto;background:#040302}
 .library-canvas{position:relative;width:min(100vw,177.62vh);aspect-ratio:1000/563;flex:0 0 auto;box-shadow:0 0 60px rgba(0,0,0,.7)}
 .library-canvas>img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;display:block;user-select:none;-webkit-user-drag:none}
+/* The ΕΜΣΤΕ crest, mounted over the mural's own medallion as a raised
+   gold-framed plaque — same 3D bezel treatment as the panel crest and
+   the Grand Master portrait, so it reads as sculpted into the wall
+   rather than a flat sticker. */
+.library-emblem{
+  position:absolute;left:40.5%;top:33.5%;width:20%;aspect-ratio:640/600;z-index:8;pointer-events:none;
+  border-radius:6px;padding:2.4%;
+  background:linear-gradient(155deg,#fff4c9,#d0a351 42%,#6f3d17 85%,#2c1308);
+  box-shadow:0 2px 0 rgba(255,244,201,.5) inset,0 -3px 8px rgba(0,0,0,.5) inset,0 22px 45px rgba(0,0,0,.65),0 4px 10px rgba(0,0,0,.5)
+}
+.library-emblem img{width:100%;height:100%;object-fit:cover;display:block;border-radius:3px;box-shadow:inset 0 0 18px rgba(0,0,0,.55),inset 0 2px 4px rgba(0,0,0,.4)}
 .knowledge-link{position:absolute;left:45.8%;top:7.6%;width:8.8%;height:13.8%;z-index:20;border-radius:50%;cursor:pointer;background:transparent}
 .knowledge-link:focus-visible{outline:2px solid rgba(255,227,143,.95);box-shadow:0 0 24px rgba(255,206,85,.8)}
 .year-hotspot{position:absolute;z-index:12;border:0;background:transparent;cursor:pointer;border-radius:3px;padding:0;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}

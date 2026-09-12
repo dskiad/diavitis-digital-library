@@ -24,6 +24,8 @@ assets/
   library-main.jpg
   nglg-emblem.jpg
   grand-master.jpg
+  emblem-plaque.jpg
+  emblem-watermark.webp
 docs/
   API_CONTRACT.md
 ```
